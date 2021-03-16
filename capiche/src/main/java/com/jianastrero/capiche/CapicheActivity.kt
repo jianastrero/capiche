@@ -5,7 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 
-class CapicheActivity : Activity() {
+internal class CapicheActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
