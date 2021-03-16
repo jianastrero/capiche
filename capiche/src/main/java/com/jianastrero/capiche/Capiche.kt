@@ -13,26 +13,29 @@ fun Context.iNeed(vararg permissions: String, onGranted: (String) -> Unit, onDen
     )
 }
 
-internal fun Context.getGranted(vararg permissions: String): Array<String> =
+internal fun Context.getGranted(vararg permissions: String): Array<String>? =
     permissions.mapNotNull { permission ->
         if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED)
             permission
         else
             null
-    }.toTypedArray()
+    }.toTypedArray().nullIfEmpty()
 
-internal fun Context.getNotGranted(vararg permissions: String): Array<String> =
+
+internal fun Context.getNotGranted(vararg permissions: String): Array<String>? =
     permissions.mapNotNull { permission ->
         if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED)
             permission
         else
             null
-    }.toTypedArray()
+    }.toTypedArray().nullIfEmpty()
 
-internal fun Context.getDenied(vararg permissions: String): Array<String> =
+internal fun Context.getDenied(vararg permissions: String): Array<String>? =
     permissions.mapNotNull { permission ->
         if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_DENIED)
             permission
         else
             null
-    }.toTypedArray()
+    }.toTypedArray().nullIfEmpty()
+
+internal fun <T> Array<T>.nullIfEmpty(): Array<T>? = if (isEmpty()) null else this
