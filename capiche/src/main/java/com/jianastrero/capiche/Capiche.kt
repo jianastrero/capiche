@@ -21,6 +21,14 @@ internal fun Context.getGranted(vararg permissions: String): Array<String> =
             null
     }.toTypedArray()
 
+internal fun Context.getNotGranted(vararg permissions: String): Array<String> =
+    permissions.mapNotNull { permission ->
+        if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED)
+            permission
+        else
+            null
+    }.toTypedArray()
+
 internal fun Context.getDenied(vararg permissions: String): Array<String> =
     permissions.mapNotNull { permission ->
         if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_DENIED)
