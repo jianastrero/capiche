@@ -1,2 +1,2 @@
-include ':sample'
+include ':sample', ':capiche'
 rootProject.name = "Capiche Sample"
