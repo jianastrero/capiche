@@ -21,7 +21,6 @@ internal fun Context.getGranted(vararg permissions: String): Array<String>? =
             null
     }.toTypedArray().nullIfEmpty()
 
-
 internal fun Context.getNotGranted(vararg permissions: String): Array<String>? =
     permissions.mapNotNull { permission ->
         if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED)
