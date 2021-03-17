@@ -6,8 +6,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import java.io.Serializable
 
 internal const val CAPICHE_REQUEST = 1
 internal const val CAPICHE_PARAMS_KEY = "CAPICHE_PARAMS_KEY"
@@ -26,15 +24,7 @@ internal class CapicheActivity : Activity() {
             capicheParams = it as CapicheParams
         } ?: finish()
 
-        // Notify what passed permissions are granted
-        getGranted(*capicheParams.permissions)?.forEach {
-            capicheParams.onGranted.consume(it)
-        }
-
-        // Request denied permissions
-        getNotGranted(*capicheParams.permissions)?.let {
-            ActivityCompat.requestPermissions(this, it, CAPICHE_REQUEST)
-        } ?: finish()
+        ActivityCompat.requestPermissions(this, capicheParams.permissions, CAPICHE_REQUEST)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

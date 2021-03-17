@@ -15,26 +15,50 @@ fun Context.iNeed(vararg permissions: String, onGranted: (String) -> Unit, onDen
     onGrantedListeners[id] = onGranted
     onDeniedListeners[id] = onDenied
 
-    startActivity(
-        Intent(this, CapicheActivity::class.java).also {
-            it.putExtra(
-                CAPICHE_PARAMS_KEY,
-                CapicheParams(
-                    *permissions,
-                    onGranted = object : Consumer<String, Unit> {
-                        override fun consume(t: String) {
-                            granted(id, t)
-                        }
-                    },
-                    onDenied = object : Consumer<String, Unit> {
-                        override fun consume(t: String) {
-                            denied(id, t)
-                        }
-                    }
-                )
-            )
+    // Notify what passed permissions are granted
+    getGranted(*permissions)?.forEach {
+        onGranted(it)
+    }
+
+    val notGrantedPermissions = getNotGranted(*permissions)
+
+    // Traditional not null because a not serializable exception keeps on popping when the kotlin way is made
+    if (notGrantedPermissions != null) {
+        val params = CapicheParams(
+            *notGrantedPermissions,
+            onGranted = object : Consumer<String, Unit> {
+                override fun consume(t: String) {
+                    granted(id, t)
+                }
+            },
+            onDenied = object : Consumer<String, Unit> {
+                override fun consume(t: String) {
+                    denied(id, t)
+                }
+            }
+        )
+        val intent = Intent(this, CapicheActivity::class.java).also {
+            it.putExtra(CAPICHE_PARAMS_KEY, params)
         }
-    )
+        startActivity(intent)
+    }
+}
+
+fun Context.doIHave(vararg permissions: String, onGranted: (String) -> Unit, onDenied: (String) -> Unit) {
+    val id = UUID.randomUUID().toString()
+
+    onGrantedListeners[id] = onGranted
+    onDeniedListeners[id] = onDenied
+
+    // Notify what passed permissions are granted
+    getGranted(*permissions)?.forEach {
+        onGranted(it)
+    }
+
+    // RNotify what passed permissions are not
+    getNotGranted(*permissions)?.forEach {
+        onDenied(it)
+    }
 }
 
 internal fun granted(id: String, permission: String) = onGrantedListeners[id]?.invoke(permission)
