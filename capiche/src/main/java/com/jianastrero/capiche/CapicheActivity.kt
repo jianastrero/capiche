@@ -7,8 +7,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import java.io.Serializable
 
 internal const val CAPICHE_REQUEST = 1
+internal const val CAPICHE_PARAMS_KEY = "CAPICHE_PARAMS_KEY"
 
 internal class CapicheActivity : Activity() {
 
@@ -20,13 +22,13 @@ internal class CapicheActivity : Activity() {
             it.setBackgroundColor(Color.RED)
         })
 
-        intent.getParcelableExtra<CapicheParams>(CapicheParams.KEY)?.let {
-            capicheParams = it
+        intent.getSerializableExtra(CAPICHE_PARAMS_KEY)?.let {
+            capicheParams = it as CapicheParams
         } ?: finish()
 
         // Notify what passed permissions are granted
         getGranted(*capicheParams.permissions)?.forEach {
-            capicheParams.onGranted(it)
+            capicheParams.onGranted.consume(it)
         }
 
         // Request denied permissions
@@ -44,8 +46,9 @@ internal class CapicheActivity : Activity() {
                     capicheParams.onGranted
                 } else {
                     capicheParams.onDenied
-                }.invoke(permission)
+                }.consume(permission)
             }
+            finish()
         }
     }
 }
