@@ -1,6 +1,6 @@
 # Capiche
 ___
-Kotlin Extensions for cchecking permissions
+Kotlin Extensions for permissions
 
 ### Check for permission
 ```kotlin
