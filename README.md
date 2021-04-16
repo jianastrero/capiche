@@ -2,6 +2,8 @@
 ___
 Kotlin Extensions for permissions
 
+[![](https://jitpack.io/v/jianastrero/capiche.svg)](https://jitpack.io/#jianastrero/capiche)
+
 ### Check for permission
 ```kotlin
 // Check if permission is granted or not
@@ -29,6 +31,26 @@ iNeed(
     }
 )
 ```
+
+# Installation
+___
+### Step 1. Add the JitPack repository to your build file
+Add it in your root build.gradle at the end of repositories:
+```groovy
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+### Step 2. Add the dependency
+```groovy
+dependencies {
+    implementation 'com.github.jianastrero:capiche:1.0'
+}
+```
+
 
 ## [LICENSE](LICENSE)
     MIT License
